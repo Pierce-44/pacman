@@ -59,13 +59,6 @@ export default function Row({ rowInfo }: Props) {
 					) : (
 						''
 					)}
-					{squareInfo === 'P' ? (
-						<div className="absolute top-0 left-[100px] h-full w-5 flex justify-center items-center">
-							<div className="rounded-full h-full w-full bg-[#fffb00]"></div>
-						</div>
-					) : (
-						''
-					)}
 				</div>
 			))}
 		</div>
