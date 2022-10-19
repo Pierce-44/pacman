@@ -9,7 +9,7 @@ interface Props {
 }
 
 export default function useCheckDirection({ up, down, left, right }: Props) {
-	const [keyPressed, setKeyPressed] = React.useState(false);
+	const [keyPressed, setKeyPressed] = React.useState('false');
 
 	// If pressed key is our target key then set key value
 	function downHandler({ key }: { key: any }) {

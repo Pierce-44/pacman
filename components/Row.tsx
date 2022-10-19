@@ -32,6 +32,11 @@ export default function Row({ rowInfo }: Props) {
 					) : (
 						''
 					)}
+					{squareInfo === '_' ? (
+						<div className="h-full border-b-2 border-r-2 border-l-2 rounded-b-md border-blue-600 "></div>
+					) : (
+						''
+					)}
 					{squareInfo === '=' ? (
 						<div className="h-full border-t-2 border-b-2 border-blue-600 "></div>
 					) : (
@@ -56,6 +61,46 @@ export default function Row({ rowInfo }: Props) {
 					)}
 					{squareInfo === ']' ? (
 						<div className="h-full border-r-2 border-t-2 border-b-2 rounded-r-md border-blue-600"></div>
+					) : (
+						''
+					)}
+					{squareInfo === 'bl' ? (
+						<div className="h-full border-l-2 border-b-2  border-blue-600"></div>
+					) : (
+						''
+					)}
+					{squareInfo === 'br' ? (
+						<div className="h-full border-r-2 border-b-2  border-blue-600"></div>
+					) : (
+						''
+					)}
+					{squareInfo === 'tl' ? (
+						<div className="h-full border-l-2 border-t-2  border-blue-600"></div>
+					) : (
+						''
+					)}
+					{squareInfo === 'tr' ? (
+						<div className="h-full border-r-2 border-t-2  border-blue-600"></div>
+					) : (
+						''
+					)}
+					{squareInfo === 'b' ? (
+						<div className="h-full border-b-2  border-blue-600"></div>
+					) : (
+						''
+					)}
+					{squareInfo === 'l' ? (
+						<div className="h-full border-l-2  border-blue-600"></div>
+					) : (
+						''
+					)}
+					{squareInfo === 't' ? (
+						<div className="h-full border-t-2  border-blue-600"></div>
+					) : (
+						''
+					)}
+					{squareInfo === 'r' ? (
+						<div className="h-full border-r-2  border-blue-600"></div>
 					) : (
 						''
 					)}

@@ -1,14 +1,14 @@
 import React from 'react';
 
-export default function useGetPacManPosition(map: string[][]) {
+export default function useGetPosition(map: string[][], who: string) {
 	const [x, setX] = React.useState<number>();
 	const [y, setY] = React.useState<number>();
 
 	React.useEffect(() => {
 		const pacPositionX = map
 			.map((arrayInfo) => {
-				if (arrayInfo.includes('P')) {
-					return arrayInfo.indexOf('P');
+				if (arrayInfo.includes(who)) {
+					return arrayInfo.indexOf(who);
 				}
 			})
 			.filter((x) => {
@@ -20,7 +20,7 @@ export default function useGetPacManPosition(map: string[][]) {
 
 		const pacPositionY = map
 			.map((arrayInfo, index) => {
-				if (arrayInfo.includes('P')) {
+				if (arrayInfo.includes(who)) {
 					return index;
 				}
 			})
