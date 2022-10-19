@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
-import { ghostMapData, ghostNameCodes } from '../util/mapData';
+import { ghostMapData } from '../util/mapData';
 
 interface props {
 	ghosts: {
@@ -15,12 +15,14 @@ interface props {
 }
 
 function setNewPosition(
-	currentPosition,
-	currentArray,
-	nameCode,
-	moveRules,
-	setMoveRules,
-	setMap
+	currentPosition: number,
+	currentArray: number,
+	nameCode: string,
+	moveRules: { [key: string]: string[] },
+	setMoveRules: React.Dispatch<
+		React.SetStateAction<{ [key: string]: string[] }>
+	>,
+	setGhostMap: React.Dispatch<React.SetStateAction<string[][]>>
 ) {
 	const availablePosition = [];
 
@@ -200,7 +202,7 @@ function setNewPosition(
 		ghostMapData[randomAvailablePosition?.array][
 			randomAvailablePosition?.position
 		] = nameCode;
-		setMap([...ghostMapData]);
+		setGhostMap([...ghostMapData]);
 	}
 }
 
@@ -209,23 +211,25 @@ export default function useHanldeMovingGhosts({ ghosts, setGhostMap }: props) {
 
 	let checkedGhosts: string[] = [];
 
-	const [moveRules, setMoveRules] = React.useState({
-		gR: ['up', 'right'],
-		gP: ['down', 'left'],
-		gG: ['down', 'left'],
-		gB: ['up', 'right'],
-		gY: ['down', 'left'],
-		gPu: ['down', 'left'],
-		gO: ['up', 'right'],
-		gW: ['down', 'left'],
-		gGr: ['down', 'left'],
-		gBr: ['up', 'right'],
-		gTu: ['down', 'left'],
-	});
+	const [moveRules, setMoveRules] = React.useState<{ [key: string]: string[] }>(
+		{
+			gR: ['up', 'right'],
+			gP: ['down', 'left'],
+			gG: ['down', 'left'],
+			gB: ['up', 'right'],
+			gY: ['down', 'left'],
+			gPu: ['down', 'left'],
+			gO: ['up', 'right'],
+			gW: ['down', 'left'],
+			gGr: ['down', 'left'],
+			gBr: ['up', 'right'],
+			gTu: ['down', 'left'],
+		}
+	);
 
 	React.useEffect(() => {
 		ghosts.map((info) => {
-			ghostMapData.map((arrayInfo, arrayNumber, index) => {
+			ghostMapData.map((arrayInfo, arrayNumber) => {
 				if (
 					arrayInfo.includes(info.code) &&
 					!checkedGhosts.includes(info.code)
