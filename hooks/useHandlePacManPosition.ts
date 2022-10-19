@@ -88,6 +88,8 @@ function handleNextPosition(
 				ghostMapData[arrayNumber + 1][arrayInfo.indexOf('P')];
 			const ghostCheckRight =
 				ghostMapData[arrayNumber - 1][arrayInfo.indexOf('P')];
+			const ghostCheckCurrent =
+				ghostMapData[arrayNumber][arrayInfo.indexOf('P')];
 
 			if (ghostsNameArray.includes(ghostCheckUp)) {
 				ghostMapData[arrayNumber][arrayInfo.indexOf('P') + 1] = 'a';
@@ -104,6 +106,10 @@ function handleNextPosition(
 			if (ghostsNameArray.includes(ghostCheckRight)) {
 				ghostMapData[arrayNumber - 1][arrayInfo.indexOf('P')] = 'a';
 				ghostMapData[12][12] = ghostCheckRight;
+			}
+			if (ghostsNameArray.includes(ghostCheckCurrent)) {
+				ghostMapData[arrayNumber][arrayInfo.indexOf('P')] = 'a';
+				ghostMapData[12][12] = ghostCheckCurrent;
 			}
 
 			setGhostMap([...ghostMapData]);

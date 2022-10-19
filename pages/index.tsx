@@ -9,6 +9,7 @@ import useHandlePacManPosition from '../hooks/useHandlePacManPosition';
 import { ghostMapData, mapData } from '../util/mapData';
 import useHandleMovingGhosts from '../hooks/useHandleMovingGhosts';
 import useHandleSpecial from '../hooks/useHandleSpecial';
+import useRemoveGhostFromPrison from '../hooks/useRemoveGhostFromPrison';
 
 const Home: NextPage = () => {
 	const [map, setMap] = React.useState(mapData);
@@ -50,6 +51,8 @@ const Home: NextPage = () => {
 	useHandleMovingGhosts({ ghosts, setGhostMap });
 
 	useHandleSpecial(specialActive, setSpecialActive);
+
+	useRemoveGhostFromPrison(setGhostMap);
 
 	React.useEffect(() => {
 		setTimeout(() => setEat(!eat), specialActive ? 100 : 250);

@@ -6,7 +6,6 @@ export default function useHandleSpecial(
 ) {
 	React.useEffect(() => {
 		if (specialActive) {
-			console.log('special');
 			setTimeout(() => setSpecialActive(false), 7000);
 		}
 	}, [specialActive, setSpecialActive]);
