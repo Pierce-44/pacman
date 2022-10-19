@@ -8,11 +8,14 @@ import useGetPosition from '../hooks/useGetPosition';
 import useHandlePacManPosition from '../hooks/useHandlePacManPosition';
 import { ghostMapData, mapData } from '../util/mapData';
 import useHandleMovingGhosts from '../hooks/useHandleMovingGhosts';
+import useHandleSpecial from '../hooks/useHandleSpecial';
 
 const Home: NextPage = () => {
 	const [map, setMap] = React.useState(mapData);
 	const [ghostMap, setGhostMap] = React.useState(ghostMapData);
 	const [eat, setEat] = React.useState(true);
+	const [specialActive, setSpecialActive] = React.useState(false);
+
 	const ghosts = [
 		{ name: 'red', coords: useGetPosition(ghostMap, 'gR'), code: 'gR' },
 		{ name: 'pink', coords: useGetPosition(ghostMap, 'gP'), code: 'gP' },
@@ -36,12 +39,20 @@ const Home: NextPage = () => {
 
 	const pacManCoords = useGetPosition(map, 'P');
 
-	useHandlePacManPosition({ direction, setMap });
+	useHandlePacManPosition({
+		direction,
+		specialActive,
+		setGhostMap,
+		setMap,
+		setSpecialActive,
+	});
 
 	useHandleMovingGhosts({ ghosts, setGhostMap });
 
+	useHandleSpecial(specialActive, setSpecialActive);
+
 	React.useEffect(() => {
-		setTimeout(() => setEat(!eat), 250);
+		setTimeout(() => setEat(!eat), specialActive ? 100 : 250);
 	}, [eat]);
 
 	return (
@@ -57,7 +68,11 @@ const Home: NextPage = () => {
 						<Row key={index} rowInfo={rowInfo} />
 					))}
 					<div
-						className="absolute transition-all ease-linear h-5 duration-150 top-0 left-0 w-5 flex justify-center items-center"
+						className={`${
+							specialActive
+								? 'h-8 w-8 top-[-6px] left-[-4px]'
+								: 'h-5 w-5 top-0 left-0'
+						} absolute transition-all ease-linear  duration-150  flex justify-center items-center`}
 						style={{
 							transform: `translateX(${pacManCoords.x! * 20}px) translateY(${
 								pacManCoords.y! * 20
@@ -80,14 +95,18 @@ const Home: NextPage = () => {
 									eat
 										? '-rotate-[30deg] left-[-3px] top-[-1px]'
 										: 'left-0 top-0'
-								} absolute   h-1/2 w-full bg-[#fffb00] transition-all ease-linear  duration-150`}
+								} ${
+									specialActive ? 'bg-[#0400ff] ' : 'bg-[#fffb00]'
+								} absolute h-1/2 w-full  transition-all ease-linear  duration-150`}
 							></div>
 							<div
 								className={`${
 									eat
 										? 'rotate-[30deg] left-[-3px] bottom-[-1px]'
 										: 'left-0 bottom-0'
-								} absolute h-1/2 w-full bg-[#fffb00] transition-all ease-linear  duration-150`}
+								} ${
+									specialActive ? 'bg-[#0400ff] ' : 'bg-[#fffb00]'
+								}  absolute h-1/2 w-full  transition-all ease-linear  duration-150`}
 							></div>
 						</div>
 					</div>

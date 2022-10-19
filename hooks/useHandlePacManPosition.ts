@@ -1,26 +1,36 @@
 import React from 'react';
-import { mapData } from '../util/mapData';
+import { mapData, ghostMapData, ghostsNameArray } from '../util/mapData';
 
 interface Props {
 	direction: string | boolean;
+	specialActive: boolean;
+	setGhostMap: React.Dispatch<React.SetStateAction<string[][]>>;
 	setMap: React.Dispatch<React.SetStateAction<string[][]>>;
+	setSpecialActive: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 function handleNextPosition(
 	direction: string,
 	moved: boolean,
+	specialActive: boolean,
+	setGhostMap: React.Dispatch<React.SetStateAction<string[][]>>,
 	setMoved: React.Dispatch<React.SetStateAction<boolean>>,
-	setMap: React.Dispatch<React.SetStateAction<string[][]>>
+	setMap: React.Dispatch<React.SetStateAction<string[][]>>,
+	setSpecialActive: React.Dispatch<React.SetStateAction<boolean>>
 ) {
 	function handleX(
 		arrayInfo: string[],
 		arrayNumber: number,
 		directionFactor: number
 	) {
+		if (!arrayInfo.includes('P')) {
+			return;
+		}
+
 		const checker =
 			mapData[arrayNumber][arrayInfo.indexOf('P') + directionFactor];
 
-		if ((arrayInfo.includes('P') && checker === 'e') || checker === 'o') {
+		if (checker === 'e' || checker === 'o' || checker === '0') {
 			const x = arrayInfo.indexOf('P') + directionFactor;
 			const y = arrayNumber;
 
@@ -30,6 +40,9 @@ function handleNextPosition(
 			setMap([...mapData]);
 			setTimeout(() => setMoved(!moved), 150);
 		}
+		if (checker === '0') {
+			setSpecialActive(true);
+		}
 	}
 
 	function handleY(
@@ -37,10 +50,14 @@ function handleNextPosition(
 		arrayNumber: number,
 		directionFactor: number
 	) {
+		if (!arrayInfo.includes('P')) {
+			return;
+		}
+
 		const checker =
 			mapData[arrayNumber + directionFactor]?.[arrayInfo.indexOf('P')];
 
-		if ((arrayInfo.includes('P') && checker === 'e') || checker === 'o') {
+		if (checker === 'e' || checker === 'o' || checker === '0') {
 			const x = arrayInfo.indexOf('P');
 			const y = arrayNumber + directionFactor;
 
@@ -50,10 +67,48 @@ function handleNextPosition(
 			setMap([...mapData]);
 			setTimeout(() => setMoved(!moved), 150);
 		}
+		if (checker === '0') {
+			setSpecialActive(true);
+		}
 	}
 
 	// stop is needed for when travelling negative Y, without this it jumps straight to the last Y value, this is because it updates the next sub array before the map gets rounded to reading it.
 	let stop = false;
+
+	if (specialActive) {
+		mapData.map((arrayInfo, arrayNumber) => {
+			if (!arrayInfo.includes('P')) {
+				return;
+			}
+			const ghostCheckUp =
+				ghostMapData[arrayNumber][arrayInfo.indexOf('P') + 1];
+			const ghostCheckDown =
+				ghostMapData[arrayNumber][arrayInfo.indexOf('P') - 1];
+			const ghostCheckLeft =
+				ghostMapData[arrayNumber + 1][arrayInfo.indexOf('P')];
+			const ghostCheckRight =
+				ghostMapData[arrayNumber - 1][arrayInfo.indexOf('P')];
+
+			if (ghostsNameArray.includes(ghostCheckUp)) {
+				ghostMapData[arrayNumber][arrayInfo.indexOf('P') + 1] = 'a';
+				ghostMapData[12][12] = ghostCheckUp;
+			}
+			if (ghostsNameArray.includes(ghostCheckDown)) {
+				ghostMapData[arrayNumber][arrayInfo.indexOf('P') - 1] = 'a';
+				ghostMapData[12][12] = ghostCheckDown;
+			}
+			if (ghostsNameArray.includes(ghostCheckLeft)) {
+				ghostMapData[arrayNumber + 1][arrayInfo.indexOf('P')] = 'a';
+				ghostMapData[12][12] = ghostCheckLeft;
+			}
+			if (ghostsNameArray.includes(ghostCheckRight)) {
+				ghostMapData[arrayNumber - 1][arrayInfo.indexOf('P')] = 'a';
+				ghostMapData[12][12] = ghostCheckRight;
+			}
+
+			setGhostMap([...ghostMapData]);
+		});
+	}
 
 	if (direction === 'd') {
 		mapData.map((arrayInfo, arrayNumber) => {
@@ -77,7 +132,13 @@ function handleNextPosition(
 	}
 }
 
-export default function useHandlePacManPosition({ direction, setMap }: Props) {
+export default function useHandlePacManPosition({
+	direction,
+	specialActive,
+	setGhostMap,
+	setMap,
+	setSpecialActive,
+}: Props) {
 	const [moved, setMoved] = React.useState(false);
 
 	React.useEffect(() => {
@@ -87,7 +148,15 @@ export default function useHandlePacManPosition({ direction, setMap }: Props) {
 			direction === 's' ||
 			direction === 'w'
 		) {
-			handleNextPosition(direction, moved, setMoved, setMap);
+			handleNextPosition(
+				direction,
+				moved,
+				specialActive,
+				setGhostMap,
+				setMoved,
+				setMap,
+				setSpecialActive
+			);
 		}
-	}, [direction, moved, setMap]);
+	}, [direction, moved, setGhostMap, setMap, setSpecialActive, specialActive]);
 }

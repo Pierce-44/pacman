@@ -49,7 +49,7 @@ export default function Row({ rowInfo }: Props) {
 					)}
 					{squareInfo === 'o' ? (
 						<div className="h-full flex justify-center items-center">
-							<div className="rounded-full h-1/4 w-1/4 bg-[#fffd92]"></div>
+							<div className="rounded-full h-1/5 w-1/5 bg-[#fffd92]"></div>
 						</div>
 					) : (
 						''
@@ -101,6 +101,13 @@ export default function Row({ rowInfo }: Props) {
 					)}
 					{squareInfo === 'r' ? (
 						<div className="h-full border-r-2  border-blue-600"></div>
+					) : (
+						''
+					)}
+					{squareInfo === '0' ? (
+						<div className="h-full flex justify-center items-center">
+							<div className="rounded-full h-1/2 w-1/2 bg-[#fffd92] animate-pulse"></div>
+						</div>
 					) : (
 						''
 					)}
